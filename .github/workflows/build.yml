@@ -33,6 +33,8 @@ jobs:
         uses: docker/metadata-action@v4.0.1
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ matrix.version }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3.0.0
@@ -40,7 +42,7 @@ jobs:
           context: .
           push: false
           build-args: VERSION=${{ matrix.version }}
-          tags: ${{ matrix.version }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
 ...
